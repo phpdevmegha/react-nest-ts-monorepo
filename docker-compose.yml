@@ -12,17 +12,20 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
     container_name: nest-api
     command: npm run start:dev
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - apps/backend/.env
     depends_on:
       - postgres
     volumes:
-      - .:/app 
+      - ./apps/backend:/app
+      - /app/node_modules
 
 volumes:
  pgdata:
