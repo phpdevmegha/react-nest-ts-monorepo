@@ -1,9 +1,38 @@
 # NestJS Fundamentals Notes
-
-## 📌 Playlist Reference
-
-freeCodeCamp NestJS YouTube Playlist
-
+# Table of Contents
+- [1. What is NestJS?](#1-what-is-nestjs)
+- [2. How to Set Up a NestJS Project](#2-how-to-set-up-a-nestjs-project)
+- [3. Creating Your First NestJS Project](#3-creating-your-first-nestjs-project)
+- [4. Project Structure Overview](#4-project-structure-overview)
+- [5. Core NestJS Building Blocks](#5-core-nestjs-building-blocks)
+- [6. Modules](#6-modules)
+- [7. Controllers](#7-controllers)
+- [8. Services (Providers)](#8-services-providers)
+- [9. Dependency Injection](#9-dependency-injection)
+- [10. NestJS Routing](#10-nestjs-routing)
+- [11. DTOs (Data Transfer Objects) and Validation with Pipes](#11-dtos-data-transfer-objects-and-validation-with-pipes)
+- [🗄 Database Integration (PostgreSQL, MongoDB)](#🗄-database-integration-postgresql-mongodb)
+  - [12. Install TypeORM + PostgreSQL](#12-install-typeorm--postgresql)
+  - [13. Configure PostgreSQL Connection](#13-configure-postgresql-connection)
+  - [14. Data Source Config for Migrations](#14-data-source-config-for-migrations)
+  - [15. Create an Entity](#15-create-an-entity)
+  - [16. Database Migrations (TypeORM Migrations)](#16-database-migrations-typeorm-migrations)
+- [🧾 Configuration with `.env`](#🧾-configuration-with-env)  
+- [🧰 Example CRUD REST API (PostgreSQL + TypeORM) - User Module](#🧰-example-crud-rest-api-postgresql--typeorm---user-module)
+- [ 17. Authentication & Authorization (JWT)](#17-authentication--authorization-jwt)
+  - [Install Packages](#install-packages)
+  - [Key Concepts](#key-concepts)
+  - [JWT Authentication Flow](#jwt-authentication-flow)
+  - [Example: Generating JWT Token](#example-generating-jwt-token)
+  - [Example: Validating JWT Token](#example-validating-jwt-token)
+  - [JWT Payload Structure](#jwt-payload-structure)
+  - [AuthGuard (Global)](#authguard-global)
+  - [RolesGuard](#rolesguard)
+  - [Custom Decorators](#custom-decorators)
+  - [Password Hashing (bcrypt)](#password-hashing-bcrypt)
+- [🐳 Docker + PostgreSQL Setup (Optional)](#🐳-docker--postgresql-setup-optional)
+- [🎯 Summary](#🎯-summary)
+- [📚 Useful Commands List](#📚-useful-commands-list)
 ---
 
 ## 1. What is NestJS?
@@ -48,7 +77,7 @@ cd backend
 npm run start:dev
 ```
 
-Application runs at: [http://localhost:3000](http://localhost:3000)
+Application runs at: [http://localhost:3000/api](http://localhost:3000/api)
 
 ---
 
@@ -57,12 +86,16 @@ Application runs at: [http://localhost:3000](http://localhost:3000)
 Default project structure:
 
 ```
-backend/
+apps/backend/
 ├── src/
 │   ├── app.controller.ts
 │   ├── app.controller.spec.ts
 │   ├── app.module.ts
 │   ├── app.service.ts
+|   ├── users/
+|   ├── products/
+|   ├── orders/
+|   ├── auth/
 │   └── main.ts
 ├── test/
 ├── package.json
@@ -417,6 +450,97 @@ PATCH /api/v1/users/1
 DELETE /api/v1/users/1
 ```
 
+---
+# 17. Authentication & Authorization (JWT)
+## Install Packages
+
+```bash
+npm install --save @nestjs/jwt @nestjs/passport passport passport-jwt bcryptjs
+```
+
+```bash
+npm install --save-dev @types/passport-jwt @types/bcryptjs
+```
+## Key Concepts
+- **Authentication**: Verifying user identity (e.g., login).
+- **Authorization**: Granting access to resources based on permissions. 
+
+### ⚙ JWT Authentication Flow
+
+1. User logs in with credentials.
+2. Server verifies credentials.
+3. Server issues a JWT token.
+4. User includes JWT in subsequent requests.
+5. Server validates JWT and grants access.
+### Example: Generating JWT Token
+
+```ts
+import { JwtService } from '@nestjs/jwt';
+const jwtService = new JwtService({ secret: 'yourSecretKey' });
+const payload = { username: 'john_doe', sub: userId };      
+const token = jwtService.sign(payload);
+``` 
+
+## Example: Validating JWT Token
+
+```ts
+import { JwtService } from '@nestjs/jwt';
+const jwtService = new JwtService({ secret: 'yourSecretKey' }); 
+try {
+  const decoded = jwtService.verify(token);
+} catch (e) {
+  // Handle invalid token
+}
+```
+### JWT Payload Structure
+- Standard claims:
+  - `sub`: Subject (user ID)
+  - `iat`: Issued at (timestamp)
+  - `exp`: Expiration time (timestamp)
+
+```json
+{
+  "sub": "userId",
+  "username": "john_doe",
+  "iat": 1516239022,
+  "exp": 1516242622
+}
+```
+### AuthGuard (Global)
+Responsibilities:
+Check @Public()
+Validate Bearer token
+Verify JWT
+Attach payload to request:
+```md
+```ts
+req.user = decoded;
+```
+
+
+### RolesGuard
+Responsibilities:
+Check @Roles()
+Compare user roles with required roles  
+```bash
+@Roles('ADMIN')
+@Post('products')
+```
+
+- Reads role metadata
+- Compares with req.user.role
+- Throws 403 if not allowed
+
+### Custom Decorators
+- @Public() → Skip auth
+- @Roles() → Role restriction
+
+### Password Hashing (bcrypt)
+```ts
+import * as bcrypt from 'bcryptjs';   
+const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
+```
 ---
 
 # 🐳 Docker + PostgreSQL Setup (Optional)
