@@ -1,7 +1,10 @@
-
+---
+layout: docs
+title_meta: Backend Installation Guide
+description_meta: This document explains how to install and set up the NestJS backend for the monorepo
 ---
 # 📦 Installation Guide
-```md
+---
 ## 1. Prerequisites
 
 Make sure you have installed:

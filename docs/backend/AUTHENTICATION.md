@@ -1,5 +1,11 @@
+---
+layout: docs
+title_meta: Backend Authentication & Authorization Guide
+description_meta: This document explains how to set up and use authentication and authorization in the NestJS backend for the monorepo
+---
 # 🔐 Authentication & Authorization (JWT)
-
+---
+## Overview
 This project uses:
 
 - JWT for authentication

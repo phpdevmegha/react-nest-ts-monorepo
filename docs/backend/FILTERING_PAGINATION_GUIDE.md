@@ -1,5 +1,11 @@
-# 🔍 Phase 1: Advanced Filtering & Pagination
+---
+layout: docs
+title_meta: Backend Installation Guide
+description_meta: This document explains how to install and set up the NestJS backend for the monorepo
 
+---
+# 🔍 Phase 1: Advanced Filtering & Pagination
+---
 ## What You Can Do Now
 
 ✅ **Filter products** by price range

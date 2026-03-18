@@ -1,7 +1,14 @@
+---
+layout: docs
+title_meta: Backend Database Setup
+description_meta: This document explains how to set up PostgreSQL with TypeORM in a NestJS monorepo
+---
 # 🗄 Database Setup (PostgreSQL + TypeORM + NestJS)
 
 ## 1. Install Dependencies
-
+---
+```md
+Install TypeORM and PostgreSQL driver:
 ```bash
 npm install --save @nestjs/typeorm typeorm pg
 ```

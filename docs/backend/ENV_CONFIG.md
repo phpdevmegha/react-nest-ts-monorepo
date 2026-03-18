@@ -1,7 +1,15 @@
+---
+layout: docs
+title_meta: Backend Environment Configuration
+description_meta: This document explains how to configure environment variables for the NestJS backend
+--- 
 # 🧾 Environment Configuration
-
+---
 ## 1. Create `.env` File
-
+tile: Environment Configuration
+slug: /docs/backend/ENV_CONFIG
+tags: backend, environment, configuration
+summary: This document explains how to configure environment variables for the NestJS backend
 Create a `.env` file in your project root:
 
 ```env

@@ -1,5 +1,10 @@
+---
+layout: docs
+title_meta: Backend Database Migrations (TypeORM)
+description_meta: This document explains how to install and set up the NestJS backend for the monorepo
+---
 # 🛠 Database Migrations (TypeORM)
-
+---
 ## 📦 1. Install Migration Tool
 
 ```bash
