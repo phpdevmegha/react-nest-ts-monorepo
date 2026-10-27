@@ -1,0 +1,33 @@
+# Keep the Docker build context small and free of secrets.
+# This also speeds up `docker compose build` dramatically.
+
+**/node_modules
+**/dist
+**/dist-ssr
+**/build
+**/coverage
+**/.nyc_output
+**/*.tsbuildinfo
+
+**/.git
+**/.gitignore
+**/.dockerignore
+
+**/.env
+**/.env.*
+!**/.env.example
+
+**/logs
+**/*.log
+
+**/.vite
+**/.turbo
+**/.nx
+**/.cache
+
+docs
+README.md
+
+# Container definitions are not needed inside the image
+docker-compose.yml
+**/Dockerfile

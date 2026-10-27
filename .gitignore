@@ -1,11 +1,43 @@
-# compiled output
-**/dist
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
 **/node_modules
-**/build
-.tsbuildinfo
+**/jspm_packages
+.pnpm-store/
+**/.pnpm-store/
+.yarn/cache
+.yarn/unplugged
 
+# ---------------------------------------------------------------------------
+# Compiled output / build artifacts
+# ---------------------------------------------------------------------------
+**/dist
+**/dist-ssr
+**/build
+**/out-tsc
+**/.output
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Bundler / monorepo caches
+**/.vite
+**/.turbo
+**/turbo
+**/.nx
+**/.parcel-cache
+**/.rollup.cache
+
+# ---------------------------------------------------------------------------
+# Test output & coverage
+# ---------------------------------------------------------------------------
+**/coverage
+**/.nyc_output
+
+# ---------------------------------------------------------------------------
 # Logs
+# ---------------------------------------------------------------------------
 logs
+**/logs
 *.log
 npm-debug.log*
 pnpm-debug.log*
@@ -13,45 +45,81 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# OS
-.DS_Store
-
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# dotenv environment variable files
+# ---------------------------------------------------------------------------
+# Environment variables / secrets
+# Never commit real credentials. Keep an example file instead.
+# ---------------------------------------------------------------------------
 **/.env
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
-**/.env.local
+**/.env.*
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+*.pem
+*.key
+*.p12
+*.pfx
 
-# temp directory
+# ---------------------------------------------------------------------------
+# OS files
+# ---------------------------------------------------------------------------
+.DS_Store
+**/.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ---------------------------------------------------------------------------
+# IDEs and editors
+# ---------------------------------------------------------------------------
+**/.idea
+**/.project
+**/.classpath
+**/.c9/
+**/*.launch
+**/.settings/
+**/*.sublime-workspace
+**/*.sublime-project
+**/.history
+
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+
+# Vim / Emacs / swap files
+*.sw?
+*~
+\#*\#
+.#*
+
+# ---------------------------------------------------------------------------
+# Tooling caches
+# ---------------------------------------------------------------------------
+.eslintcache
+**/.eslintcache
+.stylelintcache
+**/.stylelintcache
+.cache
+**/.cache
+
+# ---------------------------------------------------------------------------
+# Temp directory / runtime data
+# ---------------------------------------------------------------------------
 .temp
 .tmp
-
-# Runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
 
+# ---------------------------------------------------------------------------
 # Diagnostic reports (https://nodejs.org/api/report.html)
+# ---------------------------------------------------------------------------
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ---------------------------------------------------------------------------
+# Docker / local database data
+# ---------------------------------------------------------------------------
+**/pgdata/
+**/postgres-data/
