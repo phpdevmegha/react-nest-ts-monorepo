@@ -4,7 +4,7 @@ import { LoginDto } from './dto/login.dto';
 import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
-export class AuthController {
+export class AuthCo troller {
   constructor(private authService: AuthService) {}
   @Public()
   @Post('login')

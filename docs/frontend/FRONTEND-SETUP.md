@@ -26,6 +26,8 @@ npm create vite@latest frontend -- --template react-ts
 ```bash
 cd frontend
 npm install
+npm install react-router-dom axios
+npm install -D @types/react-router-dom vitest @testing-library/react @testing-library/user-event jsdom
 ```
 ---
 
