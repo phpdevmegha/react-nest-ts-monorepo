@@ -63,8 +63,10 @@ Final structure:
 apps/frontend/src/
 ├── api/          # API and axios setup
 ├── components/   # Reusable UI components
+├── context/      # React context (auth)
 ├── hooks/        # Custom React hooks
 ├── pages/        # Application pages
+├── styles/       # Shared CSS modules
 ├── types/        # TypeScript types
 ├── utils/        # Helper utilities
 ├── App.tsx
@@ -73,3 +75,8 @@ apps/frontend/src/
 ```
 ---
 # 🎉 Frontend Setup Complete!
+
+## 🔐 Authentication
+
+The login flow, session handling, protected routes, and backend contract are
+documented in [AUTHENTICATION.md](./AUTHENTICATION.md).

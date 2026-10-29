@@ -85,7 +85,13 @@ POST /auth/login
 ```json
 {
   "message": "Login successful",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "name": "Jane Doe",
+    "email": "user@example.com",
+    "role": "ADMIN"
+  }
 }
 ```
 

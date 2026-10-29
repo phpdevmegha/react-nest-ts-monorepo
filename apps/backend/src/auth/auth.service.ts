@@ -23,6 +23,14 @@ export class AuthService {
       role: user.role,
     });
 
-    return { message: 'Login successful', token };
+    // Never return the password hash to the client.
+    const safeUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    return { message: 'Login successful', token, user: safeUser };
   }
 }
