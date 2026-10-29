@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -7,6 +7,22 @@ import { ApiResponse } from 'src/common/response';
 import { ProductFilterDto } from 'src/common/dto/pagination.dto';
 import { PaginatedResponse } from 'src/common/PaginatedResponse';
 
+function normalizeProduct<T extends Partial<CreateProductDto>>(
+  dto: T,
+): T {
+  const normalized = { ...dto };
+  if (typeof normalized.title === 'string') {
+    normalized.title = normalized.title.trim();
+  }
+  if (typeof normalized.description === 'string') {
+    normalized.description = normalized.description.trim() || undefined;
+  }
+  if (typeof normalized.category === 'string') {
+    normalized.category = normalized.category.trim() || undefined;
+  }
+  return normalized;
+}
+
 @Injectable()
 export class ProductsService {
   constructor(private readonly productRepo: ProductRepository) {}
@@ -14,10 +30,7 @@ export class ProductsService {
   async findAll(): Promise<ApiResponse<Product[]>> {
     const products = await this.productRepo.findAllProducts();
 
-    if (products.length === 0) {
-      throw new NotFoundException('No products found');
-    }
-
+    // An empty catalog is a valid state; return [] so the UI can show it.
     return {
       success: true,
       message: 'Products fetched successfully',
@@ -60,7 +73,7 @@ export class ProductsService {
   }
 
   async create(dto: CreateProductDto): Promise<ApiResponse<Product>> {
-    const product = await this.productRepo.createProduct(dto);
+    const product = await this.productRepo.createProduct(normalizeProduct(dto));
 
     return {
       success: true,
@@ -73,7 +86,10 @@ export class ProductsService {
     id: number,
     dto: UpdateProductDto,
   ): Promise<ApiResponse<Product>> {
-    const updated = await this.productRepo.updateProduct(id, dto);
+    const updated = await this.productRepo.updateProduct(
+      id,
+      normalizeProduct(dto),
+    );
 
     return {
       success: true,

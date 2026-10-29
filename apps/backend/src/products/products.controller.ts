@@ -13,16 +13,24 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { ProductFilterDto } from 'src/common/dto/pagination.dto';
 
 @Controller('products')
-@Roles('ADMIN')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() dto: CreateProductDto) {
-    return this.productsService.create(dto);
+  @Roles('ADMIN')
+  create(
+    @CurrentUser('sub') currentUserId: number,
+    @Body() dto: CreateProductDto,
+  ) {
+    // Missing userId defaults to the signed-in admin creating the product.
+    return this.productsService.create({
+      ...dto,
+      userId: dto.userId ?? currentUserId,
+    });
   }
 
   @Get()
@@ -47,11 +55,13 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @Roles('ADMIN')
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateProductDto) {
     return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
+  @Roles('ADMIN')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
   }

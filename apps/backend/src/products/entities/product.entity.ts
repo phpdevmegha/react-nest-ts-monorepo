@@ -18,6 +18,15 @@ export class Product {
   @Column('decimal')
   price: number;
 
+  @Column({ type: 'text', nullable: true })
+  description: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  category: string | null;
+
+  @Column({ type: 'int', default: 0 })
+  stock: number;
+
   @Column()
   userId: number;
 

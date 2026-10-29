@@ -16,6 +16,12 @@ export class OrderRepository extends Repository<Order> {
   async createOrder(dto: CreateOrderDto): Promise<Order> {
     const user = await this.manager.findOne(User, {
       where: { id: dto.userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -42,11 +48,24 @@ export class OrderRepository extends Repository<Order> {
   }
 
   async findAllOrders(): Promise<Order[]> {
-    return this.find();
+    // Only safe user columns — never the password hash.
+    return this.find({
+      select: {
+        user: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      },
+    });
   }
 
   async findOrdersWithFilters(filters: OrderFilterDto): Promise<{ orders: Order[]; total: number }> {
-    const query = this.createQueryBuilder('order').leftJoinAndSelect('order.user', 'user');
+    const query = this.createQueryBuilder('order')
+      .leftJoin('order.user', 'user')
+      .addSelect(['user.id', 'user.name', 'user.email', 'user.role'])
+      .leftJoinAndSelect('order.products', 'product');
 
     // Search by order number
     if (filters.search) {

@@ -5,6 +5,10 @@ import {
   MinLength,
   MaxLength,
   IsPositive,
+  IsOptional,
+  IsInt,
+  Min,
+  Max,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -22,8 +26,24 @@ export class CreateProductDto {
   @IsPositive({ message: 'Price must be a positive number' })
   price: number;
 
+  @IsOptional()
+  @IsString({ message: 'Description must be a string' })
+  @MaxLength(1000, { message: 'Description cannot exceed 1000 characters' })
+  description?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Category must be a string' })
+  @MaxLength(100, { message: 'Category cannot exceed 100 characters' })
+  category?: string;
+
+  @IsOptional()
+  @IsInt({ message: 'Stock must be an integer' })
+  @Min(0, { message: 'Stock cannot be negative' })
+  @Max(1_000_000, { message: 'Stock cannot exceed 1,000,000' })
+  stock?: number;
+
+  @IsOptional()
   @IsNumber({}, { message: 'User ID must be a number' })
-  @IsNotEmpty({ message: 'User ID is required' })
   @IsPositive({ message: 'User ID must be a positive number' })
-  userId: number;
+  userId?: number;
 }

@@ -80,3 +80,8 @@ apps/frontend/src/
 
 The login flow, session handling, protected routes, and backend contract are
 documented in [AUTHENTICATION.md](./AUTHENTICATION.md).
+
+## 📊 Dashboard & Products
+
+The data-driven pages, their API layer, and the roles they require are
+documented in [DASHBOARD-PRODUCTS.md](./DASHBOARD-PRODUCTS.md).

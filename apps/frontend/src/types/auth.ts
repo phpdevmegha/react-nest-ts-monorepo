@@ -1,4 +1,6 @@
-export type UserRole = 'ADMIN' | 'MANAGER' | 'VENDOR'
+import type { UserRole } from './api'
+
+export type { UserRole }
 
 export interface AuthUser {
   id: number

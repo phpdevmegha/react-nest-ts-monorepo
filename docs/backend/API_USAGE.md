@@ -287,7 +287,9 @@ Authorization: Bearer <your_jwt_token>
 
 ## 📦 Products Module
 
-> **Note:** Products endpoints require `ADMIN` role
+> **Roles (updated):** reading products (`GET /products`, `GET /products/:id`) is
+> available to any authenticated user. Creating, updating, and deleting products
+> requires the `ADMIN` role.
 
 ### Create a New Product
 
@@ -296,16 +298,34 @@ Authorization: Bearer <your_jwt_token>
 POST /products
 ```
 
-**Description:** Create a new product (ADMIN only)
+**Description:** Create a new product (ADMIN only). `userId` is optional — when
+omitted, it defaults to the ID of the signed-in admin taken from the JWT (`sub`).
+Prices are stored as plain numbers and presented in **Indian Rupees (₹)** by the
+frontend.
 
 **Request Body:**
 ```json
 {
   "title": "Laptop Pro M2",
   "price": 999.99,
+  "description": "M2 Pro, 16GB RAM",
+  "category": "Electronics",
+  "stock": 12,
   "userId": 1
 }
 ```
+
+| Field | Required | Rules |
+|---|---|---|
+| `title` | yes | string, 3–255 chars (trimmed server-side) |
+| `price` | yes | positive number, max 2 decimals (INR) |
+| `description` | no | string, max 1000 chars |
+| `category` | no | string, max 100 chars |
+| `stock` | no | integer 0–1,000,000 (default `0`) |
+| `userId` | no | positive number; defaults to JWT `sub` |
+
+Invalid payloads return `400` with a `message: string[]` array — one message
+per failed rule.
 
 **Headers:**
 ```http
@@ -337,7 +357,10 @@ Authorization: Bearer <admin_jwt_token>
 GET /products
 ```
 
-**Description:** Retrieve all products
+**Description:** Retrieve all products. Without query parameters this returns a
+paginated envelope (default `page=1`, `limit=10`); an empty catalog is a valid
+state and returns `data: []` with HTTP 200 (no 404). Related `user` objects are
+always sanitized — they never include the password hash.
 
 **Response (200 OK):**
 ```json
@@ -444,6 +467,21 @@ Authorization: Bearer <admin_jwt_token>
 
 ---
 
+### Update a Product
+
+**Endpoint:**
+```
+PATCH /products/:id
+```
+
+**Description:** Partial update (ADMIN only). Send only the fields to change;
+each field follows the same validation rules as creation. The Products page
+uses this endpoint from its Edit dialog (shared `ProductForm` component).
+
+**Response (200 OK):** the updated product inside the `ApiResponse` envelope.
+
+---
+
 ### Delete Product by ID
 
 **Endpoint:**
@@ -451,7 +489,8 @@ Authorization: Bearer <admin_jwt_token>
 DELETE /products/:id
 ```
 
-**Description:** Delete a product by ID (ADMIN only)
+**Description:** Delete a product by ID (ADMIN only). In the UI this is always
+wrapped behind a `ConfirmDialog` popup before the request is sent.
 
 **Path Parameters:**
 - `id` (number) - The product ID

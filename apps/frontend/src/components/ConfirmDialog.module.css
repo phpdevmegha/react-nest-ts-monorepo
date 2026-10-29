@@ -1,0 +1,44 @@
+.message {
+  margin: 0;
+  color: #374151;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.cancel {
+  padding: 9px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+}
+
+.cancel:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.confirm {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #dc2626;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.confirm:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.cancel:disabled,
+.confirm:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}

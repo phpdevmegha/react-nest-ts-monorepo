@@ -1,0 +1,45 @@
+.primary,
+.secondary,
+.danger {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.primary {
+  background: #6d28d9;
+  color: #fff;
+}
+
+.primary:hover:not(:disabled) {
+  background: #5b21b6;
+}
+
+.secondary {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+}
+
+.secondary:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.danger:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.primary:disabled,
+.secondary:disabled,
+.danger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

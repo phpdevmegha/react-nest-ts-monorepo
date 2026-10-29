@@ -12,13 +12,29 @@ export class ProductRepository extends Repository<Product> {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    return this.find();
+    // Include the owner so the UI can show who created each product,
+    // but select only safe user columns (never the password hash).
+    return this.find({
+      relations: { user: true },
+      select: {
+        user: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      },
+    });
   }
 
   async findProductsWithFilters(
     filters: ProductFilterDto,
   ): Promise<{ products: Product[]; total: number }> {
-    const query = this.createQueryBuilder('product');
+    // Include the owner so the UI can show who created each product,
+    // but select only safe user columns (never the password hash).
+    const query = this.createQueryBuilder('product')
+      .leftJoin('product.user', 'user')
+      .addSelect(['user.id', 'user.name', 'user.email', 'user.role']);
 
     // Search by title
     if (filters.search) {
