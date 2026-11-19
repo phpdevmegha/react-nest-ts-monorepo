@@ -21,16 +21,59 @@ services:
       context: .
       dockerfile: apps/backend/Dockerfile
     container_name: nest-api
-    command: npm run start:dev
+    command: npm run start:dev -w backend
     ports:
       - "3000:3000"
     env_file:
       - apps/backend/.env
+    # .env (copied from .env.example) provides DB_USERNAME/DB_PASSWORD/DB_NAME.
+    # The two overrides below point the backend at the postgres service inside
+    # the compose network instead of the host values (localhost/5434).
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
     depends_on:
-      - postgres
+      db-setup:
+        condition: service_completed_successfully
     volumes:
-      - ./apps/backend:/app
+      - ./apps/backend/src:/app/apps/backend/src
       - /app/node_modules
+
+  # One-shot: applies migrations and seeds the first admin user.
+  # Both commands are idempotent, so this is safe on every `up`.
+  db-setup:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    env_file:
+      - apps/backend/.env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+    command: >
+      sh -c "npm run migration:run -w backend && npm run seed -w backend"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm ci --workspace frontend && cd apps/frontend && npx vite --host 0.0.0.0"
+    container_name: nest-web
+    ports:
+      - "5173:5173"
+    environment:
+      # Inside the compose network the Vite /api proxy must target the api
+      # service, not localhost:3000 (the default for local development).
+      PROXY_TARGET: http://api:3000
+    depends_on:
+      - api
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/apps/frontend/node_modules
 
 volumes:
  pgdata:
